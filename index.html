@@ -1,0 +1,132 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/space10-community/conversational-form@1.0.1/dist/conversational-form.min.js" crossorigin></script>
+</head>
+<body>
+<form id="cf-form" cf-form>
+
+  <cf-robot-message cf-questions="Bonjour!|Hey!|Hello!"></cf-robot-message>
+
+  <!-- On demande le nom à la personne -->
+  <input cf-questions="Je m'appelle William, et vous?|Ici William, à qui ai-je affaire?" type="text" id="name" required cf-error="Entrée incorrecte, veuillez saisir votre nom svp" >
+  
+  <!-- On choisi une compétence (magicien/ingé)-->
+  <fieldset cf-questions="Enchanté {name}! Quelle casquette dois-je enfiler ?">
+    <label for="skill-magicien">Magicien
+                  <input type="radio" name="skill" id="skill-magicien" value="magicien">
+              </label>
+
+    <label for="skill-informaticien">Informaticien
+                  <input type="radio" name="skill" id="skill-informaticien" value="informaticien">
+              </label>
+  </fieldset>
+
+  <cf-robot-message cf-questions="Ça marche!"></cf-robot-message>
+
+  <!-- path magicien -->
+  <input type="text" cf-questions="Pourriez-vous m'expliquer en quoi je peux vous aider en quelques lignes?" cf-conditional-skill="magicien" />
+
+  <!-- path ingé -->
+  <fieldset cf-questions="En quoi puis-je vous aider ?">
+    <label for="info-website">Création d'un site web
+                  <input type="radio" name="info" id="info-website" value="website" cf-conditional-skill="informaticien">
+              </label>
+    <label for="info-automation">Automatisation d'un processus
+                  <input type="radio" name="info" id="info-automation" value="automation" cf-conditional-skill="informaticien">
+              </label>
+    <label for="info-taf">Offre d'emploi
+                <input type="radio" name="info" id="info-taf" value="taf" cf-conditional-skill="informaticien">
+        </label>              
+    <label for="info-autre">Autre
+                  <input type="radio" name="info" id="info-autre" value="autre" cf-conditional-skill="informaticien">
+          </label>
+  </fieldset>
+
+  <!-- offre d'emploi -->
+  <cf-robot-message cf-questions="Ok, j'ai quelques questions à vous poser :"></cf-robot-message cf-conditional-info="taf">
+    <!-- type de contrat -->
+  <fieldset cf-questions="De quel type de contrat s'agit-il ?">
+    <label for="info-website">CDD
+                  <input type="radio" name="cfc-taf" id="taf-cdd" value="cdd" cf-conditional-info="taf">
+              </label>
+    <label for="info-automation">CDI
+                  <input type="radio" name="cfc-taf" id="taf-cdi" value="cdi" cf-conditional-info="taf">
+              </label>
+    <label for="info-taf">Intérim
+                <input type="radio" name="cfc-taf" id="taf-interim" value="interim" cf-conditional-info="taf">
+        </label>              
+  </fieldset>
+  <!-- mission -->
+  <input cf-questions="Pourriez-vous me décrire l'offre en quelques lignes ?" type="text" id="mission" required cf-error="Entrée incorrecte, veuillez décrire le poste proposé" cf-conditional-info="taf">>
+  <!-- skills -->
+  <fieldset cf-questions="Quelles seraient mes compétences les plus utiles pour ce poste ?" cf-conditional-info="taf">
+    <input type="checkbox" name="info-skill" cf-label="DevOps" />
+    <input type="checkbox" name="info-skill" cf-label="Scripting" />
+    <input type="checkbox" name="info-skill" cf-label="Windows" />
+    <input type="checkbox" name="info-skill" cf-label="Unix" />
+    <input type="checkbox" name="info-skill" cf-label="AWS" />
+    <input type="checkbox" name="info-skill" cf-label="Azure" />
+    <input type="checkbox" name="info-skill" cf-label="SQL" />
+    <input type="checkbox" name="info-skill" cf-label="Développement WEB" />
+  </fieldset>
+
+<!-- localisation -->
+   <input cf-questions="Où se trouve la mission ?" type="text" id="localisation" required cf-error="Entrée incorrecte, veuillez saisir le lieu de la mission" cf-conditional-info="taf">>
+  <!-- salaire -->
+  <input cf-questions="Dans quelle tranche de salaire ?" type="text" id="salaire" required cf-error="Entrée incorrecte, veuillez saisir le salaire moyen proposé pour la mission" cf-conditional-info="taf">>
+
+  <!-- demande de l'email -->
+  <input type="email" name="email" cf-questions="Merci {name}, c'est noté! A quelle adresse email je peux vous recontacter?">
+
+ </form>
+ <!-- <div id="cf-context" role="cf-context" cf-context></div> -->
+ <script>
+   window.onload = function() {
+  var conversationalForm = window.cf.ConversationalForm.startTheConversation({
+    formEl: document.getElementById("cf-form"),
+    showProgressBar:true,
+    robotImage:"https://media-exp1.licdn.com/dms/image/C4D03AQHIp06W1cc0Dw/profile-displayphoto-shrink_800_800/0/1593532659693?e=1617840000&v=beta&t=nm1mdXSrrJfRMfeKoLII1a1K7Wt02XFfKkAly1iXM94",
+    userImage:"https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png",
+    userInterfaceOptions:{
+    controlElementsInAnimationDelay: 250,
+    robot: {
+        robotResponseTime: 1000,
+        showThinking: true,
+        chainedResponseTime: 400
+    },
+    user:{
+        showThinking: false,
+        showThumb: false
+    }
+    },
+    context: document.getElementById("cf-context"),
+    dictionaryData: {
+        "entry-not-found": "Wörterbuchschlüssel wird nicht gefunden.",
+        "input-placeholder": "Saisir votre réponse ici ...",
+        "input-placeholder-required": "Eingabe erforderlich ...",
+        "input-placeholder-error": "Entrée incorrect ...",
+        "input-placeholder-file-error": "Datei-Upload fehlgeschlagen ...",
+        "input-placeholder-file-size-error": "Dateigröße zu groß ...",
+        "input-no-filter": "Impossible de valider la valeur '{input-value}'",
+        "user-reponse-and": " und ",
+        "user-reponse-missing": "Aucune valeure ...",
+        "general": "Allgemeiner Typ1|Allgemeiner Typ2"
+    },// empty will throw error
+    dictionaryRobot: {
+        "text": "Bitte schreiben Sie etwas Text.",
+        "input": "Bitte schreiben Sie etwas Text.",
+        "name": "Wie heißen Sie?",
+        "email": "Brauchen Sie Ihre E-Mail.",
+        "password": "Bitte geben Sie das Passwort ein",
+        "tel": "Wie ist deine Telefonnummer?",
+        "radio": "Ich brauche Sie, um eine dieser auszuwählen.",
+        "checkbox": "Wählen Sie so viele, wie Sie möchten.",
+        "select": "Wählen Sie eine dieser Optionen.",
+        "general": "Allgemeines1|Allgemeines2|Allgemeines3.."
+    }
+});
+};
+
+ </script>
+ </body>
+ </html>
